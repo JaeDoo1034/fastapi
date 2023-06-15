@@ -1,22 +1,51 @@
-from pydantic import BaseModel
-from typing import List
+from fastapi import APIRouter, Body, HTTPException, status
+from models.events import Event 
+from typing import List 
 
-class Event(BaseModel):
-    id: int
-    title : str
-    image : str
-    description : str
-    tags : List[str]
-    location : str
+event_router = APIRouter(
+    tags=["Events"]
+)
 
-    # Event 클래스 안에 Config 서브 클래스 추가 -- 문서화할 때 샘플데이터 보여주기 위한 용도
-    class Config:
-        schema_extra = {
-            "example" : {
-                "title" : "FastAPI Book Launch",
-                "image" : "https://linktomyimage.com/image.png",
-                "description" : "We will be discussing the contents of the FastAPI book in this event. Ensure to come with your own copy to win gifts",
-                "tags" : ["python","fastapi","book","launch"],
-                "location" : "Google Meet"
+events = []
+
+@event_router.get('/',response_model=List[Event])
+async def retrieve_all_events() -> List[Event]:
+    return events 
+
+@event_router.get("/{id}", response_model = Event)
+async def retrieve_event(id:int) -> Event:
+    for event in events:
+        if event.id == id:
+            return event
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Event with supplied ID does not exist!"
+    )
+
+
+@event_router.post("/new")
+async def create_event(body: Event = Body(...)) -> dict :
+    events.append(body)
+    return {
+        "message" : "Event created successfully"
+    }
+
+@event_router.delete('/{id}')
+async def delete_event(id :int) -> dict : 
+    for event in events:
+        if event.id == id :
+            events.remove(event)
+            return {
+                "message" : "Event deleted successfully"
             }
-        }
+    raise HTTPException(
+        status_code = status.HTTP_404_NOT_FOUND,
+        detail = "Event with supplied ID does not exist"
+    )
+
+@event_router.delete('/')
+async def delete_all_events() -> dict : 
+    events.clear()
+    return {
+        "message" : 'Events deleted successfully'
+    }
