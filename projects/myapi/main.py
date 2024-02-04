@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware # FASTAPI에 CORS 예외 URL 등록.
+from domain.question import question_router
 
 app = FastAPI()
 
@@ -15,6 +16,8 @@ app.add_middleware(
     allow_headers = ["*"],
 )
 
-@app.get("/hello")
-def hello():
-    return {"message" : "Hello"}
+# @app.get("/hello")
+# def hello():
+#     return {"message" : "Hello"}
+
+app.include_router(question_router.router)
