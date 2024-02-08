@@ -34,10 +34,10 @@ print(fr"q의 subject ? : {q.subject}")
 db.commit()
 
 ############# 데이터 삭제하기 #############
-q = db.query(Question).get(1)
-db.delete(q)
-print("삭제 완료!")
-db.commit() # 삭제 역시 commit 필요.
+# q = db.query(Question).get(1)
+# db.delete(q)
+# print("삭제 완료!")
+# db.commit() # 삭제 역시 commit 필요.
 
 
 # --------------------- 답변 데이터 --------------------- #
@@ -61,4 +61,6 @@ print(fr"질문 a의 id : {a.id}")
 a = db.query(Answer).get(1)
 print(fr"db로 조회한 Answer 모델 내 첫 번째 데이터의 id : {a.id}")
 
+print(db.query(Question).order_by(Question.create_date.desc()))
+print(db.query(Question).order_by(Question.create_date.desc()).all())
 # Answer 모델과 Question 모델 간 question relationship 다시 확인하기! (1/29)
