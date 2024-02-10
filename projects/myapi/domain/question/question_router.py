@@ -2,8 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import Question
-
+from domain.question import question_schema,question_crud
 
 
 #  --- 라우터 파일에 반드시 필요한 것은 APIRouter클래스로 생성한 router객체.
@@ -37,10 +36,11 @@ router = APIRouter(
 >>  DB 세션 객체를 생성하고 종료하는 이런 반복적인 작업을 진행.
 >> SOLID 원칙 중 DIP 임!
 참고 URL : https://velog.io/@heyoni/Dependency-Injection 
-
-
 '''
-@router.get("/list")
+
+# response_model : question_list의 리턴값은 Question 스키마로 구성된 리스트!
+@router.get("/list", response_model = list[question_schema.Question]) # Question 모델에 정의된 데이터 타입만을 이용.
 def question_list(db : Session = Depends(get_db)):
-    _question_list = db.query(Question).order_by(Question.create_date.desc()).all()
+    _question_list = question_crud.get_question_list(db)
+    # Question 모델의 모든 항목이 출력. 출력부분에 대한 제어 필요.(노출 X 등.)
     return _question_list

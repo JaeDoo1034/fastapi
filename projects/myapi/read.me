@@ -1,4 +1,6 @@
-ORM 모델
+### Content 정리
+
+1. ORM 모델
  > sqlalchemy 사용 
  > alembic 사용 : sqlalchemy로 작성한 모델을 기반으로 데이터베이스를 쉽게 관리할 수 있게 도와주는 도구
      - migrations 디렉터리 : alembic 도구를 사용할 때 생성되는 리비전 파일들을 저장하는 용도
@@ -7,3 +9,15 @@ ORM 모델
      - alembic.ini 파일 : alembic의 환경설정 도구.
      - sqlite 내 alembic_verison 테이블 : alembic 도구가 데이터베이스를 변경. 관리하려고 사용하는 테이블.
      - 관련 자료 : https://blog.neonkid.xyz/257
+
+2. 의존성 주입
+의존성 주입(Dependency Injection) : 필요한 기능을 선언하여 사용할 수 있음을 의미.
+>>  DB 세션 객체를 생성하고 종료하는 이런 반복적인 작업을 진행.
+참고 URL : https://velog.io/@heyoni/Dependency-Injection 
+
+3.스키마 : 데이터의 구조와 명세.
+
+4. type.GenericAlias : 사용자 정의 데이터 타입을 지정하여, 그 타입에 해당하는 애들만 input 값을 받을 수 있도록!
+>> type(list[A])
+<class 'types.GenericAlias'>
+참고 URL : https://mypy.readthedocs.io/en/stable/generics.html
